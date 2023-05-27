@@ -55,15 +55,35 @@ class ProjectController extends Controller
         return view('projects.index', compact('project', 'comments'));
     }
     
-
-    
-    
-    public function destroy($id)
+    public function destroy(Project $project)
     {
-        $project = Project::findOrFail($id);
         $project->delete();
     
         return redirect()->route('projects.index')->with('success', 'Project deleted successfully.');
+    }
+
+    public function editComment(Comment $comment)
+    {
+        return view('comments.edit', compact('comment'));
+    }
+
+    public function updateComment(Request $request, Comment $comment)
+    {
+        $request->validate([
+            'content' => 'required',
+        ]);
+
+        $comment->content = $request->input('content');
+        $comment->save();
+
+        return redirect()->back()->with('success', 'Comment updated successfully.');
+    }
+
+    public function deleteComment(Comment $comment)
+    {
+        $comment->delete();
+
+        return redirect()->back()->with('success', 'Comment deleted successfully.');
     }
 
     public function storeComment(Request $request, Project $project)
@@ -80,6 +100,4 @@ class ProjectController extends Controller
 
         return redirect()->back()->with('success', 'Comment added successfully.');
     }
-
-    
 }

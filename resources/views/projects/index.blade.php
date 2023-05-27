@@ -48,6 +48,25 @@
                                 <li class="mb-4">
                                     <div class="flex items-center">
                                         <span class="ml-2 font-semibold">{{ $comment->user->name }}</span>
+                                        <div class="ml-auto flex">
+                                            @if ($comment->user_id === auth()->user()->id)
+                                                <form id="edit-form-{{ $comment->id }}" action="{{ route('comments.update', $comment->id) }}" method="POST" style="display: none;">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <textarea name="content" rows="3" class="px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-900 dark:text-gray-300">{{ $comment->content }}</textarea>
+                                                    <div class="flex mt-2">
+                                                        <button type="submit" class="bg-yellow-500 text-white px-4 py-2 rounded-md mr-2 hover:bg-yellow-700">Update</button>
+                                                        <button type="button" onclick="event.preventDefault(); cancelEdit('{{ $comment->id }}');" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-700">Cancel</button>
+                                                    </div>
+                                                </form>
+                                                <button type="button" onclick="event.preventDefault(); editComment('{{ $comment->id }}');" class="bg-blue-500 text-white px-4 py-2 rounded-md ml-2 hover:bg-blue-700">Edit</button>
+                                                <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this comment?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md ml-2 hover:bg-red-700">Delete</button>
+                                                </form>
+                                            @endif
+                                        </div>
                                     </div>
                                     <p class="mt-2 text-gray-600 dark:text-gray-400">{{ $comment->content }}</p>
                                 </li>
@@ -59,4 +78,13 @@
         </div>
     </div>
 
+    <script>
+        function editComment(commentId) {
+            document.getElementById('edit-form-' + commentId).style.display = 'block';
+        }
+
+        function cancelEdit(commentId) {
+            document.getElementById('edit-form-' + commentId).style.display = 'none';
+        }
+    </script>
 </x-app-layout>

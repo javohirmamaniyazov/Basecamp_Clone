@@ -31,6 +31,14 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('projects', ProjectController::class);
 Route::post('projects/{project}/comments', [ProjectController::class, 'storeComment'])->name('projects.storeComment');
+// web.php
+
+
+// Other routes...
+
+Route::delete('/comments/{comment}', [ProjectController::class, 'deleteComment'])->name('comments.destroy');
+Route::put('/comments/{comment}', [ProjectController::class, 'updateComment'])->name('comments.update');
+
 
 
 require __DIR__.'/auth.php';
