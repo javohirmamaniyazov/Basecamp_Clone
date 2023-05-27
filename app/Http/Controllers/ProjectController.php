@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -50,8 +51,11 @@ class ProjectController extends Controller
     public function show($id)
     {
         $project = Project::findOrFail($id);
-        return view('projects.index', ['project' => $project]);
+        $comments = Comment::where('project_id', $id)->get();
+        return view('projects.index', compact('project', 'comments'));
     }
+    
+
     
     
     public function destroy($id)
@@ -61,5 +65,21 @@ class ProjectController extends Controller
     
         return redirect()->route('projects.index')->with('success', 'Project deleted successfully.');
     }
+
+    public function storeComment(Request $request, Project $project)
+    {
+        $request->validate([
+            'content' => 'required',
+        ]);
+
+        $comment = new Comment();
+        $comment->content = $request->input('content');
+        $comment->project_id = $project->id;
+        $comment->user_id = auth()->user()->id;
+        $comment->save();
+
+        return redirect()->back()->with('success', 'Comment added successfully.');
+    }
+
     
 }
