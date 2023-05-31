@@ -25,8 +25,15 @@ class ProjectController extends Controller
             'name' => 'required',
             'description' => 'required',
         ]);
-
-        Project::create($request->only(['name', 'description']));
+        $name = $request->name;
+        $description = $request->description;
+        $project = new Project;
+        $project->name=$name;
+        $project->description=$description;
+        $project->user_id = auth()->user()->id;
+        $project->save();
+        
+        // Project::create($request->only(['name', 'description', 'user_id']));
 
         return redirect()->route('projects.index')->with('success', 'Project created successfully.');
     }
@@ -41,6 +48,7 @@ class ProjectController extends Controller
         $request->validate([
             'name' => 'required',
             'description' => 'required',
+            'user_id' => 'required',
         ]);
 
         $project->update($request->only(['name', 'description']));
