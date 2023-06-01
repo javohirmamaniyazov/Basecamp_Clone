@@ -19,11 +19,11 @@
                 </h2>
                 <hr class="my-4 border-gray-300 dark:border-gray-700" />
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="lg:grid-cols-2 gap-5">
                     @if ($projects)
                         @foreach ($projects as $project)
                         <a href="{{ url('projects/' . $project->id) }}">
-                            <div class="bg-gray-100 dark:bg-gray-700 rounded-lg p-4 shadow block  transition-colors">
+                            <div class="bg-gray-100 dark:bg-gray-700 rounded-lg m-3  p-4 shadow block  transition-colors" style="height: 125px">
                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                                     {{ $project->name }}
                                 </h3>
