@@ -48,7 +48,6 @@ class ProjectController extends Controller
         $request->validate([
             'name' => 'required',
             'description' => 'required',
-            'user_id' => 'required',
         ]);
 
         $project->update($request->only(['name', 'description']));
