@@ -8,7 +8,6 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h2 class="text-lg font-semibold mt-3">
                         Projects
                         <a style="margin-left: 80%" href="{{ url('/projects/create') }}">
@@ -60,5 +59,4 @@
             </div>
         </div>
     </div>
-
 </x-app-layout>
