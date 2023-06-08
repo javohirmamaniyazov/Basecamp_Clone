@@ -24,8 +24,4 @@ class Project extends Model
     {
         return $this->belongsTo(User::class);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> baa924360157c86a479ab52b4a39c784d6edc84a
