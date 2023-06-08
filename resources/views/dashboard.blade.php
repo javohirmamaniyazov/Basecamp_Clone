@@ -23,7 +23,7 @@
                     @if ($projects)
                         @foreach ($projects as $project)
                         <a href="{{ url('projects/' . $project->id) }}">
-                            <div class="bg-gray-100 dark:bg-gray-700 rounded-lg m-3  p-4 shadow block  transition-colors" style="height: 125px">
+                            <div class="bg-gray-100 dark:bg-gray-700 rounded-lg m-3  p-4 shadow block  transition-colors" style="height: 150px">
                                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                                     {{ $project->name }}
                                 </h3>
@@ -44,6 +44,7 @@
                                         </form>
                                     @endif
                                 </div>
+                                <h4 class="flex justify-end">Created by: {{ $project->user->name }}</h4>
                             </div>
                                 </a>        
                             @endforeach
