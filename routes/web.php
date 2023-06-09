@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\AttachmentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,6 +40,8 @@ Route::post('projects/{project}/comments', [ProjectController::class, 'storeComm
 Route::delete('/comments/{comment}', [ProjectController::class, 'deleteComment'])->name('comments.destroy');
 Route::put('/comments/{comment}', [ProjectController::class, 'updateComment'])->name('comments.update');
 
+Route::post('/projects/{project}/attachments', [AttachmentController::class, 'store'])->name('attachments.store');
+Route::delete('/attachments/{attachment}', [AttachmentController::class, 'destroy'])->name('attachments.destroy');
 
 
 require __DIR__.'/auth.php';

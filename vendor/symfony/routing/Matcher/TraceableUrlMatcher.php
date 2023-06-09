@@ -29,9 +29,6 @@ class TraceableUrlMatcher extends UrlMatcher
 
     protected $traces;
 
-    /**
-     * @return array
-     */
     public function getTraces(string $pathinfo)
     {
         $this->traces = [];
@@ -44,9 +41,6 @@ class TraceableUrlMatcher extends UrlMatcher
         return $this->traces;
     }
 
-    /**
-     * @return array
-     */
     public function getTracesForRequest(Request $request)
     {
         $this->request = $request;
@@ -160,7 +154,7 @@ class TraceableUrlMatcher extends UrlMatcher
         return [];
     }
 
-    private function addTrace(string $log, int $level = self::ROUTE_DOES_NOT_MATCH, string $name = null, Route $route = null): void
+    private function addTrace(string $log, int $level = self::ROUTE_DOES_NOT_MATCH, string $name = null, Route $route = null)
     {
         $this->traces[] = [
             'log' => $log,

@@ -31,7 +31,6 @@ final class TestSuiteForTestMethodWithDataProvider extends TestSuite
     private readonly int $line;
 
     /**
-     * @psalm-param non-empty-string $name
      * @psalm-param class-string $className
      * @psalm-param non-empty-string $methodName
      */

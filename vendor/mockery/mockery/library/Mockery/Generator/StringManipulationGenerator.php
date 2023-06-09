@@ -34,7 +34,6 @@ use Mockery\Generator\StringManipulation\Pass\RemoveDestructorPass;
 use Mockery\Generator\StringManipulation\Pass\RemoveUnserializeForInternalSerializableClassesPass;
 use Mockery\Generator\StringManipulation\Pass\TraitPass;
 use Mockery\Generator\StringManipulation\Pass\AvoidMethodClashPass;
-use Mockery\Generator\StringManipulation\Pass\ClassAttributesPass;
 
 class StringManipulationGenerator implements Generator
 {
@@ -61,7 +60,6 @@ class StringManipulationGenerator implements Generator
             new RemoveBuiltinMethodsThatAreFinalPass(),
             new RemoveDestructorPass(),
             new ConstantsPass(),
-            new ClassAttributesPass(),
         ]);
     }
 

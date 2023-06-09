@@ -20,8 +20,6 @@
 
 namespace Mockery\Generator;
 
-use const PHP_VERSION_ID;
-
 class UndefinedTargetClass implements TargetClassInterface
 {
     private $name;
@@ -34,11 +32,6 @@ class UndefinedTargetClass implements TargetClassInterface
     public static function factory($name)
     {
         return new self($name);
-    }
-
-    public function getAttributes()
-    {
-        return [];
     }
 
     public function getName()

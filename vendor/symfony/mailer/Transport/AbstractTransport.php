@@ -73,10 +73,6 @@ abstract class AbstractTransport implements TransportInterface
 
             $event = new MessageEvent($message, $envelope, (string) $this);
             $this->dispatcher->dispatch($event);
-            if ($event->isRejected()) {
-                return null;
-            }
-
             $envelope = $event->getEnvelope();
             $message = $event->getMessage();
 
@@ -112,7 +108,9 @@ abstract class AbstractTransport implements TransportInterface
      */
     protected function stringifyAddresses(array $addresses): array
     {
-        return array_map(fn (Address $a) => $a->toString(), $addresses);
+        return array_map(function (Address $a) {
+            return $a->toString();
+        }, $addresses);
     }
 
     protected function getLogger(): LoggerInterface
@@ -120,7 +118,7 @@ abstract class AbstractTransport implements TransportInterface
         return $this->logger;
     }
 
-    private function checkThrottling(): void
+    private function checkThrottling()
     {
         if (0 == $this->rate) {
             return;

@@ -32,7 +32,7 @@ final class ListGroupsCommand implements Command
         $buffer = $this->warnAboutConflictingOptions();
         $buffer .= 'Available test group(s):' . PHP_EOL;
 
-        $groups = $this->suite->groups();
+        $groups = $this->suite->getGroups();
         sort($groups);
 
         foreach ($groups as $group) {
@@ -42,7 +42,7 @@ final class ListGroupsCommand implements Command
 
             $buffer .= sprintf(
                 ' - %s' . PHP_EOL,
-                $group,
+                $group
             );
         }
 

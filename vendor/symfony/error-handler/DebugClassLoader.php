@@ -21,6 +21,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use Prophecy\Prophecy\ProphecySubjectInterface;
 use ProxyManager\Proxy\ProxyInterface;
 use Symfony\Component\ErrorHandler\Internal\TentativeTypes;
+use Symfony\Component\HttpClient\HttplugClient;
 use Symfony\Component\VarExporter\LazyObjectInterface;
 
 /**
@@ -134,7 +135,7 @@ class DebugClassLoader
     {
         $this->classLoader = $classLoader;
         $this->isFinder = \is_array($classLoader) && method_exists($classLoader[0], 'findFile');
-        parse_str($_ENV['SYMFONY_PATCH_TYPE_DECLARATIONS'] ?? $_SERVER['SYMFONY_PATCH_TYPE_DECLARATIONS'] ?? getenv('SYMFONY_PATCH_TYPE_DECLARATIONS') ?: '', $this->patchTypes);
+        parse_str(getenv('SYMFONY_PATCH_TYPE_DECLARATIONS') ?: '', $this->patchTypes);
         $this->patchTypes += [
             'force' => null,
             'php' => \PHP_MAJOR_VERSION.'.'.\PHP_MINOR_VERSION,
@@ -384,7 +385,7 @@ class DebugClassLoader
 
         // Detect annotations on the class
         if ($doc = $this->parsePhpDoc($refl)) {
-            $classIsTemplate = isset($doc['template']) || isset($doc['template-covariant']);
+            $classIsTemplate = isset($doc['template']);
 
             foreach (['final', 'deprecated', 'internal'] as $annotation) {
                 if (null !== $description = $doc[$annotation][0] ?? null) {
@@ -421,7 +422,9 @@ class DebugClassLoader
             if (!isset(self::$checkedClasses[$use])) {
                 $this->checkClass($use);
             }
-            if (isset(self::$deprecated[$use]) && strncmp($vendor, str_replace('_', '\\', $use), $vendorLen) && !isset(self::$deprecated[$class])) {
+            if (isset(self::$deprecated[$use]) && strncmp($vendor, str_replace('_', '\\', $use), $vendorLen) && !isset(self::$deprecated[$class])
+                && !(HttplugClient::class === $class && \in_array($use, [\Http\Message\RequestFactory::class, \Http\Message\StreamFactory::class, \Http\Message\UriFactory::class], true))
+            ) {
                 $type = class_exists($class, false) ? 'class' : (interface_exists($class, false) ? 'interface' : 'trait');
                 $verb = class_exists($use, false) || interface_exists($class, false) ? 'extends' : (interface_exists($use, false) ? 'implements' : 'uses');
 
@@ -531,7 +534,7 @@ class DebugClassLoader
             // To read method annotations
             $doc = $this->parsePhpDoc($method);
 
-            if (($classIsTemplate || isset($doc['template']) || isset($doc['template-covariant'])) && $method->hasReturnType()) {
+            if (($classIsTemplate || isset($doc['template'])) && $method->hasReturnType()) {
                 unset($doc['return']);
             }
 
@@ -758,7 +761,7 @@ class DebugClassLoader
                 if ('.' !== $f[0]) {
                     $dirFiles[$f] = $f;
                     if ($f === $file) {
-                        $kFile = $file;
+                        $kFile = $k = $file;
                     } elseif ($f !== $k = strtolower($f)) {
                         $dirFiles[$k] = $f;
                     }
@@ -930,7 +933,7 @@ class DebugClassLoader
     /**
      * Utility method to add #[ReturnTypeWillChange] where php triggers deprecations.
      */
-    private function patchReturnTypeWillChange(\ReflectionMethod $method): void
+    private function patchReturnTypeWillChange(\ReflectionMethod $method)
     {
         if (\count($method->getAttributes(\ReturnTypeWillChange::class))) {
             return;
@@ -958,7 +961,7 @@ class DebugClassLoader
     /**
      * Utility method to add @return annotations to the Symfony code-base where it triggers self-deprecations.
      */
-    private function patchMethod(\ReflectionMethod $method, string $returnType, string $declaringFile, string $normalizedType): void
+    private function patchMethod(\ReflectionMethod $method, string $returnType, string $declaringFile, string $normalizedType)
     {
         static $patchedMethods = [];
         static $useStatements = [];
@@ -1097,7 +1100,7 @@ EOTXT;
         return [$namespace, $useOffset, $useMap];
     }
 
-    private function fixReturnStatements(\ReflectionMethod $method, string $returnType): void
+    private function fixReturnStatements(\ReflectionMethod $method, string $returnType)
     {
         if ('docblock' !== $this->patchTypes['force']) {
             if ('7.1' === $this->patchTypes['php'] && 'object' === ltrim($returnType, '?')) {

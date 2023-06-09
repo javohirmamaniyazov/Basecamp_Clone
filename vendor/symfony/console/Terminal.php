@@ -123,15 +123,17 @@ class Terminal
             return self::$stty;
         }
 
-        // skip check if shell_exec function is disabled
-        if (!\function_exists('shell_exec')) {
+        // skip check if exec function is disabled
+        if (!\function_exists('exec')) {
             return false;
         }
 
-        return self::$stty = (bool) shell_exec('stty 2> '.('\\' === \DIRECTORY_SEPARATOR ? 'NUL' : '/dev/null'));
+        exec('stty 2>&1', $output, $exitcode);
+
+        return self::$stty = 0 === $exitcode;
     }
 
-    private static function initDimensions(): void
+    private static function initDimensions()
     {
         if ('\\' === \DIRECTORY_SEPARATOR) {
             $ansicon = getenv('ANSICON');
@@ -165,7 +167,7 @@ class Terminal
     /**
      * Initializes dimensions using the output of an stty columns line.
      */
-    private static function initDimensionsUsingStty(): void
+    private static function initDimensionsUsingStty()
     {
         if ($sttyString = self::getSttyColumns()) {
             if (preg_match('/rows.(\d+);.columns.(\d+);/is', $sttyString, $matches)) {

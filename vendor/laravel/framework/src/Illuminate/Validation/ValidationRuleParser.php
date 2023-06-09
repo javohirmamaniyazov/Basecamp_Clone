@@ -310,7 +310,7 @@ class ValidationRuleParser
     }
 
     /**
-     * Expand the conditional rules in the given array of rules.
+     * Expand and conditional rules in the given array of rules.
      *
      * @param  array  $rules
      * @param  array  $data

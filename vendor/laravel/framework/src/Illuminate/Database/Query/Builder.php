@@ -7,7 +7,6 @@ use Carbon\CarbonPeriod;
 use Closure;
 use DateTimeInterface;
 use Illuminate\Contracts\Database\Query\Builder as BuilderContract;
-use Illuminate\Contracts\Database\Query\ConditionExpression;
 use Illuminate\Contracts\Database\Query\Expression as ExpressionContract;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Concerns\BuildsQueries;
@@ -754,14 +753,6 @@ class Builder implements BuilderContract
      */
     public function where($column, $operator = null, $value = null, $boolean = 'and')
     {
-        if ($column instanceof ConditionExpression) {
-            $type = 'Expression';
-
-            $this->wheres[] = compact('type', 'column', 'boolean');
-
-            return $this;
-        }
-
         // If the column is an array, we will assume it is an array of key-value pairs
         // and can add them each as a where clause. We will maintain the boolean we
         // received when the method was called and pass it into the nested where.
@@ -2082,7 +2073,7 @@ class Builder implements BuilderContract
     /**
      * Add a "having" clause to the query.
      *
-     * @param  \Illuminate\Contracts\Database\Query\Expression|\Closure|string  $column
+     * @param  \Closure|string  $column
      * @param  string|int|float|null  $operator
      * @param  string|int|float|null  $value
      * @param  string  $boolean
@@ -2091,14 +2082,6 @@ class Builder implements BuilderContract
     public function having($column, $operator = null, $value = null, $boolean = 'and')
     {
         $type = 'Basic';
-
-        if ($column instanceof ConditionExpression) {
-            $type = 'Expression';
-
-            $this->havings[] = compact('type', 'column', 'boolean');
-
-            return $this;
-        }
 
         // Here we will make some assumptions about the operator. If only 2 values are
         // passed to the method, we will assume that the operator is an equals sign
@@ -2134,7 +2117,7 @@ class Builder implements BuilderContract
     /**
      * Add an "or having" clause to the query.
      *
-     * @param  \Illuminate\Contracts\Database\Query\Expression|\Closure|string  $column
+     * @param  \Closure|string  $column
      * @param  string|int|float|null  $operator
      * @param  string|int|float|null  $value
      * @return $this

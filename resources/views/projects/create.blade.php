@@ -27,7 +27,7 @@
                         </div>
 
                         <div class="flex justify-end">
-                            <button type="submit" class="text-dark font-semibold px-4 py-2 rounded" style="border: 1px solid blue; background-color: #1E90FF;">Create</button>
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded">Create</button>
                         </div>
                     </form>
                 </div>

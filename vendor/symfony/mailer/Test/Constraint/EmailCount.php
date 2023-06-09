@@ -54,7 +54,8 @@ final class EmailCount extends Constraint
         foreach ($events->getEvents($this->transport) as $event) {
             if (
                 ($this->queued && $event->isQueued())
-                || (!$this->queued && !$event->isQueued())
+                ||
+                (!$this->queued && !$event->isQueued())
             ) {
                 ++$count;
             }

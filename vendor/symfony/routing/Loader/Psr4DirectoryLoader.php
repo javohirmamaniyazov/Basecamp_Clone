@@ -66,11 +66,15 @@ final class Psr4DirectoryLoader extends Loader implements DirectoryAwareLoaderIn
         $files = iterator_to_array(new \RecursiveIteratorIterator(
             new \RecursiveCallbackFilterIterator(
                 new \RecursiveDirectoryIterator($directory, \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS),
-                fn (\SplFileInfo $current) => !str_starts_with($current->getBasename(), '.')
+                function (\SplFileInfo $current) {
+                    return !str_starts_with($current->getBasename(), '.');
+                }
             ),
             \RecursiveIteratorIterator::SELF_FIRST
         ));
-        usort($files, fn (\SplFileInfo $a, \SplFileInfo $b) => (string) $a > (string) $b ? 1 : -1);
+        usort($files, function (\SplFileInfo $a, \SplFileInfo $b) {
+            return (string) $a > (string) $b ? 1 : -1;
+        });
 
         /** @var \SplFileInfo $file */
         foreach ($files as $file) {

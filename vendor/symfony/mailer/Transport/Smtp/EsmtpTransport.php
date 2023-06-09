@@ -32,21 +32,17 @@ class EsmtpTransport extends SmtpTransport
     private string $password = '';
     private array $capabilities;
 
-    public function __construct(string $host = 'localhost', int $port = 0, bool $tls = null, EventDispatcherInterface $dispatcher = null, LoggerInterface $logger = null, AbstractStream $stream = null, array $authenticators = null)
+    public function __construct(string $host = 'localhost', int $port = 0, bool $tls = null, EventDispatcherInterface $dispatcher = null, LoggerInterface $logger = null, AbstractStream $stream = null)
     {
         parent::__construct($stream, $dispatcher, $logger);
 
-        if (null === $authenticators) {
-            // fallback to default authenticators
-            // order is important here (roughly most secure and popular first)
-            $authenticators = [
-                new Auth\CramMd5Authenticator(),
-                new Auth\LoginAuthenticator(),
-                new Auth\PlainAuthenticator(),
-                new Auth\XOAuth2Authenticator(),
-            ];
-        }
-        $this->setAuthenticators($authenticators);
+        // order is important here (roughly most secure and popular first)
+        $this->authenticators = [
+            new Auth\CramMd5Authenticator(),
+            new Auth\LoginAuthenticator(),
+            new Auth\PlainAuthenticator(),
+            new Auth\XOAuth2Authenticator(),
+        ];
 
         /** @var SocketStream $stream */
         $stream = $this->getStream();
@@ -97,14 +93,6 @@ class EsmtpTransport extends SmtpTransport
     public function getPassword(): string
     {
         return $this->password;
-    }
-
-    public function setAuthenticators(array $authenticators): void
-    {
-        $this->authenticators = [];
-        foreach ($authenticators as $authenticator) {
-            $this->addAuthenticator($authenticator);
-        }
     }
 
     public function addAuthenticator(AuthenticatorInterface $authenticator): void

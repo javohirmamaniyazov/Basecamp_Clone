@@ -22,7 +22,7 @@ use Throwable;
  *
  * Depends on the following methods:
  *
- * @method static shiftTimezone($timezone) Set the timezone
+ * @method \Carbon\Carbon|\Carbon\CarbonImmutable shiftTimezone($timezone) Set the timezone
  */
 trait Options
 {

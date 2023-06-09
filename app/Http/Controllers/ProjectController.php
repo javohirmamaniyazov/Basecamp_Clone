@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Attachment;
 use App\Models\Comment;
 use App\Models\Project;
 use Illuminate\Http\Request;
@@ -33,7 +34,7 @@ class ProjectController extends Controller
         $project->user_id = auth()->user()->id;
         $project->save();
         
-        // Project::create($request->only(['name', 'description', 'user_id']));
+        // Project::create($request->only(['name', 'description']));
 
         return redirect()->route('projects.index')->with('success', 'Project created successfully.');
     }
@@ -59,8 +60,11 @@ class ProjectController extends Controller
     {
         $project = Project::findOrFail($id);
         $comments = Comment::where('project_id', $id)->get();
-        return view('projects.index', compact('project', 'comments'));
+        $attachments = Attachment::where('project_id', $id)->get(); // Retrieve attachments for the project
+        
+        return view('projects.index', compact('project', 'comments', 'attachments'));
     }
+    
     
     public function destroy(Project $project)
     {

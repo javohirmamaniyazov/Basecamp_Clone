@@ -103,9 +103,6 @@ class InlineFragmentRenderer extends RoutableFragmentRenderer
         }
     }
 
-    /**
-     * @return Request
-     */
     protected function createSubRequest(string $uri, Request $request)
     {
         $cookies = $request->cookies->all();
@@ -129,9 +126,6 @@ class InlineFragmentRenderer extends RoutableFragmentRenderer
         }
         if ($request->getDefaultLocale() !== $request->getLocale()) {
             $subRequest->setLocale($request->getLocale());
-        }
-        if ($request->attributes->has('_stateless')) {
-            $subRequest->attributes->set('_stateless', $request->attributes->get('_stateless'));
         }
 
         return $subRequest;

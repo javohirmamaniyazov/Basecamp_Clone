@@ -20,9 +20,7 @@
 
 namespace Mockery\Adapter\Phpunit;
 
-use PHPUnit\Framework\TestCase;
-
-abstract class MockeryTestCase extends TestCase
+abstract class MockeryTestCase extends \PHPUnit\Framework\TestCase
 {
     use MockeryPHPUnitIntegration;
     use MockeryTestCaseSetUp;

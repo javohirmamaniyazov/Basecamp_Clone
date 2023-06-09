@@ -33,7 +33,7 @@ final class MailerTestCommand extends Command
         parent::__construct();
     }
 
-    protected function configure(): void
+    protected function configure()
     {
         $this
             ->addArgument('to', InputArgument::REQUIRED, 'The recipient of the message')

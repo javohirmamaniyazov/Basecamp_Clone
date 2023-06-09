@@ -1726,6 +1726,6 @@ class LazyCollection implements CanBeEscapedWhenCastToString, Enumerable
      */
     protected function now()
     {
-        return Carbon::now()->timestamp;
+        return time();
     }
 }

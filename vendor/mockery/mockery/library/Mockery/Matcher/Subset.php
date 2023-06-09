@@ -81,21 +81,12 @@ class Subset extends MatcherAbstract
      */
     public function __toString()
     {
-        return '<Subset' . $this->formatArray($this->expected) . ">";
-    }
-
-    /**
-     * Recursively format an array into the string representation for this matcher
-     *
-     * @param array $array
-     * @return string
-     */
-    protected function formatArray(array $array)
-    {
-        $elements = [];
-        foreach ($array as $k => $v) {
-            $elements[] = $k . '=' . (is_array($v) ? $this->formatArray($v) : (string) $v);
+        $return = '<Subset[';
+        $elements = array();
+        foreach ($this->expected as $k=>$v) {
+            $elements[] = $k . '=' . (string) $v;
         }
-        return "[" . implode(", ", $elements) . "]";
+        $return .= implode(', ', $elements) . ']>';
+        return $return;
     }
 }

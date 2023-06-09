@@ -62,8 +62,6 @@ class XmlFileLoader extends FileLoader
     /**
      * Parses a node from a loaded XML file.
      *
-     * @return void
-     *
      * @throws \InvalidArgumentException When the XML is invalid
      */
     protected function parseNode(RouteCollection $collection, \DOMElement $node, string $path, string $file)
@@ -101,8 +99,6 @@ class XmlFileLoader extends FileLoader
 
     /**
      * Parses a route and adds it to the RouteCollection.
-     *
-     * @return void
      *
      * @throws \InvalidArgumentException When the XML is invalid
      */
@@ -150,8 +146,6 @@ class XmlFileLoader extends FileLoader
 
     /**
      * Parses an import and adds the routes in the resource to the RouteCollection.
-     *
-     * @return void
      *
      * @throws \InvalidArgumentException When the XML is invalid
      */

@@ -39,7 +39,7 @@ final class DumpCompletionCommand extends Command
 
     private array $supportedShells;
 
-    protected function configure(): void
+    protected function configure()
     {
         $fullCommand = $_SERVER['PHP_SELF'];
         $commandName = basename($fullCommand);
@@ -96,7 +96,7 @@ EOH
         if ($input->getOption('debug')) {
             $this->tailDebugLog($commandName, $output);
 
-            return 0;
+            return self::SUCCESS;
         }
 
         $shell = $input->getArgument('shell') ?? self::guessShell();
@@ -113,12 +113,12 @@ EOH
                 $output->writeln(sprintf('<error>Shell not detected, Symfony shell completion only supports "%s").</>', implode('", "', $supportedShells)));
             }
 
-            return 2;
+            return self::INVALID;
         }
 
         $output->write(str_replace(['{{ COMMAND_NAME }}', '{{ VERSION }}'], [$commandName, CompleteCommand::COMPLETION_API_VERSION], file_get_contents($completionFile)));
 
-        return 0;
+        return self::SUCCESS;
     }
 
     private static function guessShell(): string
