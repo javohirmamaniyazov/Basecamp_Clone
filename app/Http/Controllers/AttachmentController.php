@@ -22,7 +22,7 @@ class AttachmentController extends Controller
         $file = $request->file('file');
         $extension = $file->getClientOriginalExtension();
         $filename = Str::random(40) . '.' . $extension;
-        $path = $file->storeAs('uploads', $filename, 'public');
+        $path = $file->storeAs('public_html/uploads', $filename, 'public');
 
         // Create a new attachment record in the database
         $attachment = new Attachment();
@@ -31,9 +31,6 @@ class AttachmentController extends Controller
         $attachment->user_id = auth()->id(); // Set the user_id to the authenticated user's ID
         $attachment->save();
 
-        // Move the uploaded file to the public/uploads directory
-        $file->move(public_path('uploads'), $filename);
-
         // Redirect or perform any additional actions
         return redirect()->route('projects.index', $project)->with('success', 'Attachment uploaded successfully.');
     }
@@ -41,7 +38,7 @@ class AttachmentController extends Controller
     public function destroy(Attachment $attachment)
     {
         // Delete the attachment file from storage
-        Storage::disk('public')->delete($attachment->file_path);
+        Storage::disk('public')->delete('public_html' . $attachment->file_path);
 
         // Delete the attachment record from the database
         $attachment->delete();
