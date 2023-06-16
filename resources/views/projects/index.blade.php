@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-1">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h2 class="text-lg font-semibold">
@@ -18,72 +18,114 @@
                         <h3 class="text-lg font-semibold">Name: {{ $project->name }}</h3>
                         <p class="text-gray-600 dark:text-gray-400">Description: {{ $project->description }}</p>
                     </div>
-                    <!-- Add attachment creation form -->
-
-
                 </div>
-
-                <!-- Display attachments section -->
-
             </div>
         </div>
     </div>
+
+    @if ($project->user_id === auth()->user()->id)
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <form action="{{ route('projects.update', $project->id) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-group">
+                            <label for="admin_user_id" class="text-lg font-semibold" style="margin-bottom: 10px;">Assign
+                                Admin:</label>
+                            <div class="input-group flex">
+                                <select name="admin_user_id" id="admin_user_id" class="form-control m-3"
+                                    style="height: 50px; width: 90%; ">
+                                    <option value="">Select Admin User</option>
+                                    @foreach ($users as $user)
+                                        <option value="{{ $user->id }}"
+                                            {{ $user->id == $project->admin_user_id ? 'selected' : '' }}>
+                                            {{ $user->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn-md m-1 p-3 border rounded"
+                                        style="background-color: #1E90FF; height: 53px; color: white">+Add
+                                        admin</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <div class="mt-8">
-                        <h3 class="text-lg font-semibold" style="margin-bottom: 10px;">Create Attachment</h3>
+                    <div class="mt-3">
+                        <h3 class="text-lg font-semibold" style="margin-bottom: 10px;">Create Attachment
+                        </h3>
                         <form action="{{ route('attachments.store', $project) }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
                             <input type="file" class="mb-4" name="file"><br>
-                            <button type="submit" style="padding:5px; border: 1px solid blue; border-radius: 10px; background-color: #1E90FF; margin-bottom: 20px;">Upload</button>
+                            <button type="submit"
+                                style="padding:5px; border: 1px solid blue; border-radius: 10px; background-color: #1E90FF; margin-bottom: 20px;">Upload</button>
                         </form>
                         <h3 class="text-lg font-semibold">Attachments:</h3>
                         <ul class="mt-4 flex">
                             @forelse ($project->attachments as $attachment)
                                 <li class="py-2">
-
                                     <div>
                                         @php
                                             $extension = strtolower(pathinfo($attachment->file_path, PATHINFO_EXTENSION));
                                             $imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+                        
+                                            $filePath = 'storage/uploads/' . $attachment->file_path;
+                                            $url = url($filePath);
                                         @endphp
-
+                        
                                         @if (in_array($extension, $imageExtensions))
-                                            <img src="{{ asset($attachment->file_path) }}" alt="Attachment"
-                                                style="width: 135px; height:130px">
+                                            <img src="{{ $url }}" alt="Attachment" style="width: 135px; height:130px">
                                         @else
                                             <img src="https://www.computerhope.com/jargon/t/text-file.png"
                                                 alt="Default File Image" style="width: 135px; height:130px">
-                                        @endif                                      
+                                        @endif
                                     </div>
+                        
                                     @if ($attachment->user_id === auth()->user()->id)
-                                    <form action="{{ route('attachments.destroy', $attachment->id) }}" method="POST" class="ml-4">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" style="padding:5px; border: 1px solid rgb(255, 55, 0); border-radius: 10px; width: 120px; background-color: #ff1e31; margin: 5px;">Delete</button>
-                                    </form>  
+                                        <form action="{{ route('attachments.destroy', $attachment->id) }}"
+                                            method="POST" class="ml-4">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                style="padding:5px; border: 1px solid rgb(255, 55, 0); border-radius: 10px; width: 120px; background-color: #ff1e31; margin: 5px;">Delete</button>
+                                        </form>
                                     @endif
+                        
                                     <div class="flex items-center">
-                                        <span
-                                            class="text-gray-500 dark:text-gray-300 ml-2">{{ $attachment->created_at->diffForHumans() }}</span>
+                                        <span class="text-gray-500 dark:text-gray-300 ml-2">
+                                            {{ $attachment->created_at->diffForHumans() }}
+                                        </span>
                                     </div>
                                 </li>
                             @empty
                                 <li class="py-2">No attachments yet.</li>
                             @endforelse
                         </ul>
+
+
+                        </ul>
+
                     </div>
 
                 </div>
             </div>
         </div>
     </div>
-    {{-- <img src="https://www.computerhope.com/jargon/t/text-file.png" alt="Default File Image"
-                                                class="mt-2 w-32 h-20"> --}}
+
+
+
     <div class="py-6">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -200,6 +242,11 @@
             </div>
         </div>
     </div>
+
+
+
+
+
 
 
 
