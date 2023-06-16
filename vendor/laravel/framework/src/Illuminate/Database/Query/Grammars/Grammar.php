@@ -620,7 +620,7 @@ class Grammar extends BaseGrammar
      */
     public function prepareBindingForJsonContains($binding)
     {
-        return json_encode($binding, JSON_UNESCAPED_UNICODE);
+        return json_encode($binding);
     }
 
     /**
@@ -707,18 +707,6 @@ class Grammar extends BaseGrammar
     }
 
     /**
-     * Compile a clause based on an expression.
-     *
-     * @param  \Illuminate\Database\Query\Builder  $query
-     * @param  array  $where
-     * @return string
-     */
-    public function whereExpression(Builder $query, $where)
-    {
-        return $where['column']->getValue($this);
-    }
-
-    /**
      * Compile the "group by" portions of the query.
      *
      * @param  \Illuminate\Database\Query\Builder  $query
@@ -764,8 +752,6 @@ class Grammar extends BaseGrammar
             return $this->compileHavingNotNull($having);
         } elseif ($having['type'] === 'bit') {
             return $this->compileHavingBit($having);
-        } elseif ($having['type'] === 'Expression') {
-            return $this->compileHavingExpression($having);
         } elseif ($having['type'] === 'Nested') {
             return $this->compileNestedHavings($having);
         }
@@ -846,17 +832,6 @@ class Grammar extends BaseGrammar
         $parameter = $this->parameter($having['value']);
 
         return '('.$column.' '.$having['operator'].' '.$parameter.') != 0';
-    }
-
-    /**
-     * Compile a having clause involving an expression.
-     *
-     * @param  array  $having
-     * @return string
-     */
-    protected function compileHavingExpression($having)
-    {
-        return $having['column']->getValue($this);
     }
 
     /**

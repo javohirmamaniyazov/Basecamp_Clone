@@ -21,11 +21,8 @@ use Symfony\Component\String\UnicodeString;
  */
 abstract class Helper implements HelperInterface
 {
-    protected $helperSet;
+    protected $helperSet = null;
 
-    /**
-     * @return void
-     */
     public function setHelperSet(HelperSet $helperSet = null)
     {
         if (1 > \func_num_args()) {
@@ -91,9 +88,6 @@ abstract class Helper implements HelperInterface
         return mb_substr($string, $from, $length, $encoding);
     }
 
-    /**
-     * @return string
-     */
     public static function formatTime(int|float $secs)
     {
         static $timeFormats = [
@@ -123,9 +117,6 @@ abstract class Helper implements HelperInterface
         }
     }
 
-    /**
-     * @return string
-     */
     public static function formatMemory(int $memory)
     {
         if ($memory >= 1024 * 1024 * 1024) {
@@ -143,9 +134,6 @@ abstract class Helper implements HelperInterface
         return sprintf('%d B', $memory);
     }
 
-    /**
-     * @return string
-     */
     public static function removeDecoration(OutputFormatterInterface $formatter, ?string $string)
     {
         $isDecorated = $formatter->isDecorated();

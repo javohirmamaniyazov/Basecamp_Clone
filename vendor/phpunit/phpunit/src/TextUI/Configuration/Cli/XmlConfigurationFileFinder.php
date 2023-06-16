@@ -19,7 +19,7 @@ use function realpath;
  */
 final class XmlConfigurationFileFinder
 {
-    public function find(Configuration $configuration): false|string
+    public function find(Configuration $configuration): string|false
     {
         $useDefaultConfiguration = $configuration->useDefaultConfiguration();
 
@@ -48,7 +48,7 @@ final class XmlConfigurationFileFinder
         return false;
     }
 
-    private function configurationFileInDirectory(string $directory): false|string
+    private function configurationFileInDirectory(string $directory): string|false
     {
         $candidates = [
             $directory . '/phpunit.xml',

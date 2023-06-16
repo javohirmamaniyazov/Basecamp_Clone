@@ -89,8 +89,6 @@ class Request
     /**
      * Request body parameters ($_POST).
      *
-     * @see getPayload() for portability between content types
-     *
      * @var InputBag
      */
     public $request;
@@ -265,8 +263,6 @@ class Request
      * @param array                $files      The FILES parameters
      * @param array                $server     The SERVER parameters
      * @param string|resource|null $content    The raw body data
-     *
-     * @return void
      */
     public function initialize(array $query = [], array $request = [], array $attributes = [], array $cookies = [], array $files = [], array $server = [], $content = null)
     {
@@ -344,10 +340,6 @@ class Request
         $server['REQUEST_METHOD'] = strtoupper($method);
 
         $components = parse_url($uri);
-        if (false === $components) {
-            trigger_deprecation('symfony/http-foundation', '6.3', 'Calling "%s()" with an invalid URI is deprecated.', __METHOD__);
-            $components = [];
-        }
         if (isset($components['host'])) {
             $server['SERVER_NAME'] = $components['host'];
             $server['HTTP_HOST'] = $components['host'];
@@ -425,8 +417,6 @@ class Request
      * This is mainly useful when you need to override the Request class
      * to keep BC with an existing system. It should not be used for any
      * other purpose.
-     *
-     * @return void
      */
     public static function setFactory(?callable $callable)
     {
@@ -531,8 +521,6 @@ class Request
      *
      * It overrides $_GET, $_POST, $_REQUEST, $_SERVER, $_COOKIE.
      * $_FILES is never overridden, see rfc1867
-     *
-     * @return void
      */
     public function overrideGlobals()
     {
@@ -573,8 +561,6 @@ class Request
      *
      * @param array $proxies          A list of trusted proxies, the string 'REMOTE_ADDR' will be replaced with $_SERVER['REMOTE_ADDR']
      * @param int   $trustedHeaderSet A bit field of Request::HEADER_*, to set which headers to trust from your proxies
-     *
-     * @return void
      */
     public static function setTrustedProxies(array $proxies, int $trustedHeaderSet)
     {
@@ -616,12 +602,12 @@ class Request
      * You should only list the hosts you manage using regexs.
      *
      * @param array $hostPatterns A list of trusted host patterns
-     *
-     * @return void
      */
     public static function setTrustedHosts(array $hostPatterns)
     {
-        self::$trustedHostPatterns = array_map(fn ($hostPattern) => sprintf('{%s}i', $hostPattern), $hostPatterns);
+        self::$trustedHostPatterns = array_map(function ($hostPattern) {
+            return sprintf('{%s}i', $hostPattern);
+        }, $hostPatterns);
         // we need to reset trusted hosts on trusted host patterns change
         self::$trustedHosts = [];
     }
@@ -664,8 +650,6 @@ class Request
      * If these methods are not protected against CSRF, this presents a possible vulnerability.
      *
      * The HTTP method can only be overridden when the real HTTP method is POST.
-     *
-     * @return void
      */
     public static function enableHttpMethodParameterOverride()
     {
@@ -751,9 +735,6 @@ class Request
         return null !== $this->session && (!$skipIfUninitialized || $this->session instanceof SessionInterface);
     }
 
-    /**
-     * @return void
-     */
     public function setSession(SessionInterface $session)
     {
         $this->session = $session;
@@ -764,7 +745,7 @@ class Request
      *
      * @param callable(): SessionInterface $factory
      */
-    public function setSessionFactory(callable $factory): void
+    public function setSessionFactory(callable $factory)
     {
         $this->session = $factory;
     }
@@ -1174,8 +1155,6 @@ class Request
 
     /**
      * Sets the request method.
-     *
-     * @return void
      */
     public function setMethod(string $method)
     {
@@ -1297,8 +1276,6 @@ class Request
      * Associates a format with mime types.
      *
      * @param string|string[] $mimeTypes The associated mime types (the preferred one must be the first as it will be used as the content type)
-     *
-     * @return void
      */
     public function setFormat(?string $format, string|array $mimeTypes)
     {
@@ -1329,8 +1306,6 @@ class Request
 
     /**
      * Sets the request format.
-     *
-     * @return void
      */
     public function setRequestFormat(?string $format)
     {
@@ -1361,8 +1336,6 @@ class Request
 
     /**
      * Sets the default locale.
-     *
-     * @return void
      */
     public function setDefaultLocale(string $locale)
     {
@@ -1383,8 +1356,6 @@ class Request
 
     /**
      * Sets the locale.
-     *
-     * @return void
      */
     public function setLocale(string $locale)
     {
@@ -1507,17 +1478,7 @@ class Request
     }
 
     /**
-     * Gets the decoded form or json request body.
-     */
-    public function getPayload(): InputBag
-    {
-        return $this->request->count() ? clone $this->request : new InputBag($this->toArray());
-    }
-
-    /**
      * Gets the request body decoded as array, typically from a JSON payload.
-     *
-     * @see getPayload() for portability between content types
      *
      * @throws JsonException When the body cannot be decoded to an array
      */
@@ -1732,9 +1693,6 @@ class Request
      * Copyright (c) 2005-2010 Zend Technologies USA Inc. (https://www.zend.com/)
      */
 
-    /**
-     * @return string
-     */
     protected function prepareRequestUri()
     {
         $requestUri = '';
@@ -1903,8 +1861,6 @@ class Request
 
     /**
      * Initializes HTTP request formats.
-     *
-     * @return void
      */
     protected static function initializeFormats()
     {

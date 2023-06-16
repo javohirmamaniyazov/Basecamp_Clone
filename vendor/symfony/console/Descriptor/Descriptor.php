@@ -26,9 +26,12 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 abstract class Descriptor implements DescriptorInterface
 {
-    protected OutputInterface $output;
+    /**
+     * @var OutputInterface
+     */
+    protected $output;
 
-    public function describe(OutputInterface $output, object $object, array $options = []): void
+    public function describe(OutputInterface $output, object $object, array $options = [])
     {
         $this->output = $output;
 
@@ -42,7 +45,10 @@ abstract class Descriptor implements DescriptorInterface
         };
     }
 
-    protected function write(string $content, bool $decorated = false): void
+    /**
+     * Writes content to output.
+     */
+    protected function write(string $content, bool $decorated = false)
     {
         $this->output->write($content, false, $decorated ? OutputInterface::OUTPUT_NORMAL : OutputInterface::OUTPUT_RAW);
     }
@@ -50,25 +56,25 @@ abstract class Descriptor implements DescriptorInterface
     /**
      * Describes an InputArgument instance.
      */
-    abstract protected function describeInputArgument(InputArgument $argument, array $options = []): void;
+    abstract protected function describeInputArgument(InputArgument $argument, array $options = []);
 
     /**
      * Describes an InputOption instance.
      */
-    abstract protected function describeInputOption(InputOption $option, array $options = []): void;
+    abstract protected function describeInputOption(InputOption $option, array $options = []);
 
     /**
      * Describes an InputDefinition instance.
      */
-    abstract protected function describeInputDefinition(InputDefinition $definition, array $options = []): void;
+    abstract protected function describeInputDefinition(InputDefinition $definition, array $options = []);
 
     /**
      * Describes a Command instance.
      */
-    abstract protected function describeCommand(Command $command, array $options = []): void;
+    abstract protected function describeCommand(Command $command, array $options = []);
 
     /**
      * Describes an Application instance.
      */
-    abstract protected function describeApplication(Application $application, array $options = []): void;
+    abstract protected function describeApplication(Application $application, array $options = []);
 }

@@ -18,6 +18,9 @@
     "require": {
         "php": ">=8.1"
     },
+    "suggest": {
+        "symfony/translation-implementation": ""
+    },
     "autoload": {
         "psr-4": { "Symfony\\Contracts\\Translation\\": "" },
         "exclude-from-classmap": [
@@ -27,7 +30,7 @@
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-main": "3.4-dev"
+            "dev-main": "3.3-dev"
         },
         "thanks": {
             "name": "symfony/contracts",

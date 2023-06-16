@@ -67,7 +67,6 @@ class MethodDefinitionPass implements Pass
 
         $methodParams = array();
         $params = $method->getParameters();
-        $isPhp81 = \PHP_VERSION_ID >= 80100;
         foreach ($params as $param) {
             $paramDef = $this->renderTypeHint($param);
             $paramDef .= $param->isPassedByReference() ? '&' : '';
@@ -77,17 +76,7 @@ class MethodDefinitionPass implements Pass
             if (!$param->isVariadic()) {
                 if (false !== $param->isDefaultValueAvailable()) {
                     $defaultValue = $param->getDefaultValue();
-
-                    if (is_object($defaultValue)) {
-                        $prefix = get_class($defaultValue);
-                        if ($isPhp81 && enum_exists($prefix)) {
-                            $prefix = var_export($defaultValue, true);
-                        }
-                    } else {
-                        $prefix = var_export($defaultValue, true);
-                    }
-
-                    $paramDef .= ' = ' . $prefix;
+                    $paramDef .= ' = ' . (is_object($defaultValue) ? get_class($defaultValue) : var_export($defaultValue, true));
                 } elseif ($param->isOptional()) {
                     $paramDef .= ' = null';
                 }

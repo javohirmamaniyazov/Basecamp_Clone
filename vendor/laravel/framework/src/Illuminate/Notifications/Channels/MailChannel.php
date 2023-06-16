@@ -46,7 +46,7 @@ class MailChannel
      *
      * @param  mixed  $notifiable
      * @param  \Illuminate\Notifications\Notification  $notification
-     * @return \Illuminate\Mail\SentMessage|null
+     * @return void
      */
     public function send($notifiable, Notification $notification)
     {
@@ -61,7 +61,7 @@ class MailChannel
             return $message->send($this->mailer);
         }
 
-        return $this->mailer->mailer($message->mailer ?? null)->send(
+        $this->mailer->mailer($message->mailer ?? null)->send(
             $this->buildView($message),
             array_merge($message->data(), $this->additionalMessageData($notification)),
             $this->messageBuilder($notifiable, $notification, $message)

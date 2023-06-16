@@ -25,7 +25,7 @@ final class ProcessStream extends AbstractStream
 {
     private string $command;
 
-    public function setCommand(string $command): void
+    public function setCommand(string $command)
     {
         $this->command = $command;
     }

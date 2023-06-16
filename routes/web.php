@@ -2,7 +2,11 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+<<<<<<< HEAD
 use App\Http\Controllers\ThreadController;
+=======
+use App\Http\Controllers\AttachmentController;
+>>>>>>> c766dae1abeaa52b54701cdc953f137cc50bca09
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,6 +51,12 @@ Route::delete('/projects/{projectId}/threads/{thread}', [ThreadController::class
 Route::delete('/comments/{comment}', [ProjectController::class, 'deleteComment'])->name('comments.destroy');
 Route::put('/comments/{comment}', [ProjectController::class, 'updateComment'])->name('comments.update');
 
+<<<<<<< HEAD
 Route::resource('projects', ProjectController::class)->except(['create', 'store']);
+=======
+Route::post('/projects/{project}/attachments', [AttachmentController::class, 'store'])->name('attachments.store');
+Route::delete('/attachments/{attachment}', [AttachmentController::class, 'destroy'])->name('attachments.destroy');
+
+>>>>>>> c766dae1abeaa52b54701cdc953f137cc50bca09
 
 require __DIR__.'/auth.php';

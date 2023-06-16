@@ -9,9 +9,7 @@ use Pest\Arch\Options\LayerOptions;
 use Pest\Arch\Support\UserDefinedFunctions;
 use Pest\Expectation;
 use Pest\TestSuite;
-use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\ExpectationFailedException;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
@@ -119,7 +117,7 @@ final class SingleArchExpectation implements Contracts\ArchExpectation
      */
     public function ensureLazyExpectationIsVerified(): void
     {
-        if (TestSuite::getInstance()->test instanceof TestCase && ! $this->lazyExpectationVerified) {
+        if (TestSuite::getInstance()->test instanceof \PHPUnit\Framework\TestCase && ! $this->lazyExpectationVerified) {
             $this->lazyExpectationVerified = true;
 
             $e = null;
@@ -128,12 +126,11 @@ final class SingleArchExpectation implements Contracts\ArchExpectation
 
             try {
                 ($this->lazyExpectation)($options);
-            } catch (ExpectationFailedException|AssertionFailedError $e) {
+            } catch (ExpectationFailedException $e) {
                 if (! $this->opposite instanceof \Closure) {
                     throw $e;
                 }
             }
-
             if (! $this->opposite instanceof Closure) {
                 return;
             }

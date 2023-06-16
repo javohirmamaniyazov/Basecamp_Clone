@@ -196,7 +196,9 @@ class ScheduleListCommand extends Command
      */
     private function getClosureLocation(CallbackEvent $event)
     {
-        $callback = (new ReflectionClass($event))->getProperty('callback')->getValue($event);
+        $callback = tap((new ReflectionClass($event))->getProperty('callback'))
+                        ->setAccessible(true)
+                        ->getValue($event);
 
         if ($callback instanceof Closure) {
             $function = new ReflectionFunction($callback);

@@ -95,6 +95,9 @@ final class Facade
             self::$collector = new Collector(
                 EventFacade::instance(),
                 $configuration->source(),
+                $configuration->restrictDeprecations(),
+                $configuration->restrictNotices(),
+                $configuration->restrictWarnings(),
             );
         }
 

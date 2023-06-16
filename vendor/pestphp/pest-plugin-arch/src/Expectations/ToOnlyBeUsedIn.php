@@ -42,7 +42,7 @@ final class ToOnlyBeUsedIn
                     $blueprint->expectToOnlyBeUsedIn(
                         $options,
                         static function (string $value, string $notAllowedDependOn, Violation|null $violation): void {
-                            if (! $violation instanceof Violation) {
+                            if (! $violation instanceof \Pest\Arch\ValueObjects\Violation) {
                                 throw new ExpectationFailedException(
                                     "Expecting '$value' not to be used on '$notAllowedDependOn'.",
                                 );

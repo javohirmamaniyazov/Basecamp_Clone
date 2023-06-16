@@ -6,6 +6,7 @@
     </x-slot>
 
     <div class="py-12">
+<<<<<<< HEAD
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
@@ -18,6 +19,20 @@
                         </a>
                     </h2>
                     <hr class="my-4 border-gray-300 dark:border-gray-700" />
+=======
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="p-6 text-gray-900 dark:text-gray-100">
+                <h2 class="text-lg font-semibold mt-3">
+                    Projects
+                    <a style="margin-left: 80%" href="{{ url('/projects/create') }}">
+                        <button type="button" class="btn ml-5 text-dark">
+                            рџ“‚ Add Project
+                        </button>
+                    </a>
+                </h2>
+                <hr class="my-4 border-gray-300 dark:border-gray-700" />
+>>>>>>> c766dae1abeaa52b54701cdc953f137cc50bca09
 
                     <div class="lg:grid-cols-2 gap-5 mt-5">
                         @forelse ($projects as $project)
@@ -56,3 +71,7 @@
         </div>
     </div>
 </x-app-layout>
+<<<<<<< HEAD
+=======
+
+>>>>>>> c766dae1abeaa52b54701cdc953f137cc50bca09

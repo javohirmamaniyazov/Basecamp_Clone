@@ -20,6 +20,6 @@
 
 namespace Mockery\Exception;
 
-class InvalidArgumentException extends \InvalidArgumentException implements MockeryExceptionInterface
+class InvalidArgumentException extends \InvalidArgumentException
 {
 }

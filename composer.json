@@ -35,8 +35,6 @@
         }
     },
     "scripts": {
-         "dev": "vite",
-        "build": "vite build",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"

@@ -46,7 +46,7 @@ final class DataProviderTestSuite extends TestSuite
     public function provides(): array
     {
         if ($this->providedTests === null) {
-            $this->providedTests = [new ExecutionOrderDependency($this->name())];
+            $this->providedTests = [new ExecutionOrderDependency($this->getName())];
         }
 
         return $this->providedTests;
@@ -67,7 +67,7 @@ final class DataProviderTestSuite extends TestSuite
      */
     public function size(): TestSize
     {
-        [$className, $methodName] = explode('::', $this->name());
+        [$className, $methodName] = explode('::', $this->getName());
 
         return (new Groups)->size($className, $methodName);
     }

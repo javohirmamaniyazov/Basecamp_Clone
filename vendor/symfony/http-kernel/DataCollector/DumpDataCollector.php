@@ -68,37 +68,32 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
         $this->clonesIndex = ++$this->clonesCount;
     }
 
-    public function dump(Data $data): ?string
+    public function dump(Data $data)
     {
         $this->stopwatch?->start('dump');
 
         ['name' => $name, 'file' => $file, 'line' => $line, 'file_excerpt' => $fileExcerpt] = $this->sourceContextProvider->getContext();
 
-        if (!$this->dumper || $this->dumper instanceof Connection && !$this->dumper->write($data)) {
+        if ($this->dumper instanceof Connection) {
+            if (!$this->dumper->write($data)) {
+                $this->isCollected = false;
+            }
+        } elseif ($this->dumper) {
+            $this->doDump($this->dumper, $data, $name, $file, $line);
+        } else {
             $this->isCollected = false;
-        }
-
-        $context = $data->getContext();
-        $label = $context['label'] ?? '';
-        unset($context['label']);
-        $data = $data->withContext($context);
-
-        if ($this->dumper && !$this->dumper instanceof Connection) {
-            $this->doDump($this->dumper, $data, $name, $file, $line, $label);
         }
 
         if (!$this->dataCount) {
             $this->data = [];
         }
-        $this->data[] = compact('data', 'name', 'file', 'line', 'fileExcerpt', 'label');
+        $this->data[] = compact('data', 'name', 'file', 'line', 'fileExcerpt');
         ++$this->dataCount;
 
         $this->stopwatch?->stop('dump');
-
-        return null;
     }
 
-    public function collect(Request $request, Response $response, \Throwable $exception = null): void
+    public function collect(Request $request, Response $response, \Throwable $exception = null)
     {
         if (!$this->dataCount) {
             $this->data = [];
@@ -128,12 +123,12 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
             }
 
             foreach ($this->data as $dump) {
-                $this->doDump($dumper, $dump['data'], $dump['name'], $dump['file'], $dump['line'], $dump['label'] ?? '');
+                $this->doDump($dumper, $dump['data'], $dump['name'], $dump['file'], $dump['line']);
             }
         }
     }
 
-    public function reset(): void
+    public function reset()
     {
         $this->stopwatch?->reset();
         $this->data = [];
@@ -245,7 +240,7 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
 
             foreach ($this->data as $i => $dump) {
                 $this->data[$i] = null;
-                $this->doDump($dumper, $dump['data'], $dump['name'], $dump['file'], $dump['line'], $dump['label'] ?? '');
+                $this->doDump($dumper, $dump['data'], $dump['name'], $dump['file'], $dump['line']);
             }
 
             $this->data = [];
@@ -253,12 +248,10 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
         }
     }
 
-    private function doDump(DataDumperInterface $dumper, Data $data, string $name, string $file, int $line, string $label): void
+    private function doDump(DataDumperInterface $dumper, Data $data, string $name, string $file, int $line)
     {
         if ($dumper instanceof CliDumper) {
-            $contextDumper = function ($name, $file, $line, $fmt, $label) {
-                $this->line = '' !== $label ? $this->style('meta', $label).' in ' : '';
-
+            $contextDumper = function ($name, $file, $line, $fmt) {
                 if ($this instanceof HtmlDumper) {
                     if ($file) {
                         $s = $this->style('meta', '%s');
@@ -272,17 +265,17 @@ class DumpDataCollector extends DataCollector implements DataDumperInterface
                     } else {
                         $name = $this->style('meta', $name);
                     }
-                    $this->line .= $name.' on line '.$this->style('meta', $line).':';
+                    $this->line = $name.' on line '.$this->style('meta', $line).':';
                 } else {
-                    $this->line .= $this->style('meta', $name).' on line '.$this->style('meta', $line).':';
+                    $this->line = $this->style('meta', $name).' on line '.$this->style('meta', $line).':';
                 }
                 $this->dumpLine(0);
             };
             $contextDumper = $contextDumper->bindTo($dumper, $dumper);
-            $contextDumper($name, $file, $line, $this->fileLinkFormat, $label);
+            $contextDumper($name, $file, $line, $this->fileLinkFormat);
         } else {
             $cloner = new VarCloner();
-            $dumper->dump($cloner->cloneVar(('' !== $label ? $label.' in ' : '').$name.' on line '.$line.':'));
+            $dumper->dump($cloner->cloneVar($name.' on line '.$line.':'));
         }
         $dumper->dump($data);
     }

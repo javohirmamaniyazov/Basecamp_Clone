@@ -27,6 +27,8 @@ trait SerializesModels
                 continue;
             }
 
+            $property->setAccessible(true);
+
             if (! $property->isInitialized($this)) {
                 continue;
             }
@@ -80,6 +82,8 @@ trait SerializesModels
                 continue;
             }
 
+            $property->setAccessible(true);
+
             $property->setValue(
                 $this, $this->getRestoredPropertyValue($values[$name])
             );
@@ -94,6 +98,8 @@ trait SerializesModels
      */
     protected function getPropertyValue(ReflectionProperty $property)
     {
+        $property->setAccessible(true);
+
         return $property->getValue($this);
     }
 }

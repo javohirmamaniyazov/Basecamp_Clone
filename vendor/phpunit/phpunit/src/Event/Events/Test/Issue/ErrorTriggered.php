@@ -27,16 +27,14 @@ final class ErrorTriggered implements Event
     private readonly string $message;
     private readonly string $file;
     private readonly int $line;
-    private readonly bool $suppressed;
 
-    public function __construct(Telemetry\Info $telemetryInfo, Test $test, string $message, string $file, int $line, bool $suppressed)
+    public function __construct(Telemetry\Info $telemetryInfo, Test $test, string $message, string $file, int $line)
     {
         $this->telemetryInfo = $telemetryInfo;
         $this->test          = $test;
         $this->message       = $message;
         $this->file          = $file;
         $this->line          = $line;
-        $this->suppressed    = $suppressed;
     }
 
     public function telemetryInfo(): Telemetry\Info
@@ -64,11 +62,6 @@ final class ErrorTriggered implements Event
         return $this->line;
     }
 
-    public function wasSuppressed(): bool
-    {
-        return $this->suppressed;
-    }
-
     public function asString(): string
     {
         $message = $this->message;
@@ -78,10 +71,9 @@ final class ErrorTriggered implements Event
         }
 
         return sprintf(
-            'Test Triggered %sError (%s)%s',
-            $this->wasSuppressed() ? 'Suppressed ' : '',
+            'Test Triggered Error (%s)%s',
             $this->test->id(),
-            $message,
+            $message
         );
     }
 }

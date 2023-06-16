@@ -245,14 +245,22 @@ class ConstExprParser
 	 */
 	private function enrichWithAttributes(TokenIterator $tokens, Ast\ConstExpr\ConstExprNode $node, int $startLine, int $startIndex): Ast\ConstExpr\ConstExprNode
 	{
+		$endLine = $tokens->currentTokenLine();
+		$endIndex = $tokens->currentTokenIndex();
 		if ($this->useLinesAttributes) {
 			$node->setAttribute(Ast\Attribute::START_LINE, $startLine);
-			$node->setAttribute(Ast\Attribute::END_LINE, $tokens->currentTokenLine());
+			$node->setAttribute(Ast\Attribute::END_LINE, $endLine);
 		}
 
 		if ($this->useIndexAttributes) {
+			$tokensArray = $tokens->getTokens();
+			$endIndex--;
+			if ($tokensArray[$endIndex][Lexer::TYPE_OFFSET] === Lexer::TOKEN_HORIZONTAL_WS) {
+				$endIndex--;
+			}
+
 			$node->setAttribute(Ast\Attribute::START_INDEX, $startIndex);
-			$node->setAttribute(Ast\Attribute::END_INDEX, $tokens->endIndexOfLastRelevantToken());
+			$node->setAttribute(Ast\Attribute::END_INDEX, $endIndex);
 		}
 
 		return $node;
