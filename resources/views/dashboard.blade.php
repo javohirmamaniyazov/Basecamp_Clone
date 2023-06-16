@@ -12,8 +12,8 @@
                 <h2 class="text-lg font-semibold mt-3">
                     Projects
                     <a style="margin-left: 80%" href="{{ url('/projects/create') }}">
-                        <button type="button" class="btn ml-5 text-white shadow">
-                            📂 Add Project
+                        <button type="button" class="btn ml-5 text-dark">
+                            рџ“‚ Add Project
                         </button>
                     </a>
                 </h2>
