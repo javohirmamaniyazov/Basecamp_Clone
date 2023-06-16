@@ -5,9 +5,9 @@ body {
     background-color: #f4f4f4;
 }
 
-.container {
-    max-width: 960px;
-    margin: 110px auto 40px auto;
+.containerr {
+    max-width: 1220px;
+    margin: 50px auto 40px auto;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -30,8 +30,8 @@ body {
 
 .btn {
     background-color: #007bff;
-    color: #fff;
-    border: none;
+    color: #191717;
+    border: 1px solid rgb(18, 137, 196);
     border-radius: 3px;
     padding: 8px 16px;
     cursor: pointer;
@@ -40,29 +40,38 @@ body {
 }
 
 .edit-btn {
-    background-color: #ffbb00;
-    color: #fff;
-    border: none;
+    color: #000;
+    border: 1px solid #ffbb00;
     border-radius: 3px;
-    padding: 8px 16px;
+    padding: 6px 12px;
     cursor: pointer;
     font-size: 14px;
     transition: background-color 0.3s ease;
+    margin-right: 5px;
 }
 
-.delete-btn {
-    background-color: #bb021bb0;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    padding: 8px 16px;
+.delete {
+    color: #000;
+    padding: 6px 12px;
     cursor: pointer;
     font-size: 14px;
-    transition: background-color 0.3s ease;
+    border: 1px solid red;
+    border-radius: 3px;
+}
+
+.delete:hover {
+    background-color: #d7302b;
+    color: #fff;
+}
+
+.edit-btn:hover {
+    background-color: #ffbb00;
+    color: #fff;
 }
 
 .btn:hover {
     background-color: #0056b3;
+    color: #fff;
 }
 
 .divider {
@@ -102,25 +111,6 @@ body {
 .project-author {
     display: flex;
     justify-content: flex-end;
-}
-
-.edit-btn,
-.delete-btn {
-    display: inline-block;
-    color: #333;
-    font-size: 14px;
-    font-weight: bold;
-    margin-left: 10px;
-    padding: 6px 10px;
-    text-decoration: none;
-    border-radius: 3px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.edit-btn:hover,
-.delete-btn:hover {
-    background-color: #eee;
-    color: #555;
 }
 
 .navbar {

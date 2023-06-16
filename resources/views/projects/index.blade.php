@@ -45,8 +45,8 @@
                                     @endforeach
                                 </select>
                                 <div class="input-group-append">
-                                    <button type="submit" class="btn-md m-1 p-3 border rounded"
-                                        style="background-color: #1E90FF; height: 53px; color: white">+Add
+                                    <button type="submit" class="btn-md  mt-3 border rounded"
+                                        style="background-color: #1E90FF; height: 52px; color: white">+Add
                                         admin</button>
                                 </div>
                             </div>
@@ -79,14 +79,12 @@
                                     <div>
                                         @php
                                             $extension = strtolower(pathinfo($attachment->file_path, PATHINFO_EXTENSION));
-                                            $imageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
                         
-                                            $filePath = 'storage/uploads/' . $attachment->file_path;
-                                            $url = url($filePath);
+                                            
                                         @endphp
                         
-                                        @if (in_array($extension, $imageExtensions))
-                                            <img src="{{ $url }}" alt="Attachment" style="width: 135px; height:130px">
+                                        @if ($extension)
+                                            <img src="{{ "$attachment->file_path" }}" alt="Attachment" style="width: 135px; height:130px">
                                         @else
                                             <img src="https://www.computerhope.com/jargon/t/text-file.png"
                                                 alt="Default File Image" style="width: 135px; height:130px">
