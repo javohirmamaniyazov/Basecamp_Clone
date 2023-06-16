@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Project;
+use App\Models\Thread;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
@@ -13,36 +15,35 @@ class ProjectController extends Controller
         $projects = Project::all();
         return view('dashboard', compact('projects'));
     }
-    
+
     public function create()
     {
         return view('projects.create');
     }
-    
+
     public function store(Request $request)
     {
         $request->validate([
             'name' => 'required',
             'description' => 'required',
         ]);
+
         $name = $request->name;
         $description = $request->description;
         $project = new Project;
-        $project->name=$name;
-        $project->description=$description;
+        $project->name = $name;
+        $project->description = $description;
         $project->user_id = auth()->user()->id;
         $project->save();
-        
-        // Project::create($request->only(['name', 'description', 'user_id']));
 
-        return redirect()->route('projects.index')->with('success', 'Project created successfully.');
+        return redirect()->route('dashboard')->with('success', 'Project created successfully.');
     }
 
     public function edit(Project $project)
     {
         return view('projects.edit', compact('project'));
     }
-    
+
     public function update(Request $request, Project $project)
     {
         $request->validate([
@@ -54,18 +55,32 @@ class ProjectController extends Controller
 
         return redirect()->route('projects.index')->with('success', 'Project updated successfully.');
     }
-    
+
     public function show($id)
     {
         $project = Project::findOrFail($id);
         $comments = Comment::where('project_id', $id)->get();
-        return view('projects.index', compact('project', 'comments'));
+        $threads = Thread::where('project_id', $id)->get();
+        return view('projects.index', compact('project', 'comments', 'threads'));
     }
-    
+
+    public function addAdmin(Request $request, Project $project)
+    {
+        $userId = $request->input('newAdmin');
+        $user = User::find($userId);
+
+        if ($user) {
+            $project->admin_id = $user->id;
+            $project->save();
+        }
+
+        return redirect()->back();
+    }
+
     public function destroy(Project $project)
     {
         $project->delete();
-    
+
         return redirect()->route('projects.index')->with('success', 'Project deleted successfully.');
     }
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ThreadController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,18 +28,25 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Add Admin to Project
+    Route::post('projects/{project}/addAdmin', [ProjectController::class, 'addAdmin'])->name('projects.addAdmin');
 });
 
-Route::resource('projects', ProjectController::class);
 Route::post('projects/{project}/comments', [ProjectController::class, 'storeComment'])->name('projects.storeComment');
-// web.php
 
-
-// Other routes...
+// Thread routes
+Route::get('/projects/{projectId}/threads', [ThreadController::class, 'index'])->name('threads.index');
+Route::get('/projects/{projectId}/threads/create', [ThreadController::class, 'create'])->name('threads.create');
+Route::post('/projects/{projectId}/threads', [ThreadController::class, 'store'])->name('threads.store');
+Route::get('/projects/{projectId}/threads/{thread}', [ThreadController::class, 'show'])->name('threads.show');
+Route::get('/projects/{projectId}/threads/{thread}/edit', [ThreadController::class, 'edit'])->name('threads.edit');
+Route::put('/projects/{projectId}/threads/{thread}', [ThreadController::class, 'update'])->name('threads.update');
+Route::delete('/projects/{projectId}/threads/{thread}', [ThreadController::class, 'destroy'])->name('threads.destroy');
 
 Route::delete('/comments/{comment}', [ProjectController::class, 'deleteComment'])->name('comments.destroy');
 Route::put('/comments/{comment}', [ProjectController::class, 'updateComment'])->name('comments.update');
 
-
+Route::resource('projects', ProjectController::class)->except(['create', 'store']);
 
 require __DIR__.'/auth.php';

@@ -6,22 +6,21 @@
     </x-slot>
 
     <div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div class="p-6 text-gray-900 dark:text-gray-100">
-                <h2 class="text-lg font-semibold mt-3">
-                    Projects
-                    <a style="margin-left: 80%" href="{{ url('/projects/create') }}">
-                        <button type="button" class="btn ml-5 text-white shadow">
-                            📂 Add Project
-                        </button>
-                    </a>
-                </h2>
-                <hr class="my-4 border-gray-300 dark:border-gray-700" />
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <h2 class="text-lg font-semibold mt-3">
+                        Projects
+                        <a style="margin-left: 80%" href="{{ url('/projects/create') }}">
+                            <button type="button" class="btn ml-5 text-white shadow">
+                                📂 Add Project
+                            </button>
+                        </a>
+                    </h2>
+                    <hr class="my-4 border-gray-300 dark:border-gray-700" />
 
-                 <div class="lg:grid-cols-2 gap-5 mt-5">
-                        @if ($projects)
-                            @foreach ($projects as $project)
+                    <div class="lg:grid-cols-2 gap-5 mt-5">
+                        @forelse ($projects as $project)
                             <a href="{{ url('projects/' . $project->id) }}">
                                 <div class="d-flex bg-gray-100 dark:bg-gray-700 rounded-lg p-4 shadow block transition-colors" style="height: 130px; margin: 10px;">
                                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -32,8 +31,7 @@
                                     </p>
 
                                     <div class="flex justify-end mt-2 m-3">
-                                        
-                                        @if ($project->user_id === auth()->user()->id)
+                                        @if (Auth::check() && Auth::user()->id == $project->user_id)
                                             <a href="{{ url('projects/' . $project->id . '/edit') }}" class="btn btn-warning m-1" style="color: orange">
                                                 EDIT
                                             </a>
@@ -45,21 +43,16 @@
                                                 </button>
                                             </form>
                                         @endif
-                                        
                                     </div>
                                     <h4 class="flex justify-end">Created by: {{ $project->user->name }}</h4>
                                 </div>
                             </a>
-                            @endforeach
-                        @else
+                        @empty
                             <p>No projects found.</p>
-                        @endif
+                        @endforelse
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </x-app-layout>
-
-
