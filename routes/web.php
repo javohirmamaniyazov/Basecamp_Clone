@@ -42,6 +42,8 @@ Route::put('/comments/{comment}', [ProjectController::class, 'updateComment'])->
 
 Route::post('/projects/{project}/attachments', [AttachmentController::class, 'store'])->name('attachments.store');
 Route::delete('/attachments/{attachment}', [AttachmentController::class, 'destroy'])->name('attachments.destroy');
+Route::get('attachments/{attachment}/download', [AttachmentController::class, 'download'])->name('attachments.download');
+
 
 
 require __DIR__.'/auth.php';

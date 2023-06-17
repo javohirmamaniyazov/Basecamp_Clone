@@ -13,9 +13,10 @@
 
         <div class="register-form">
             <div class="logo">
-                <img src="https://assets.stickpng.com/thumbs/62c6f1487a58a4aa1fb770a7.png" width="35px" height="135px"
+                <img src="images/basecamp.png" height="120px" width="120px"
                     alt="Basecamp Logo">
             </div>
+            <h2 class="register" style="margin-left: 38%;">Register</h2>
             <form method="POST" action="{{ route('register') }}">
                 @csrf
 

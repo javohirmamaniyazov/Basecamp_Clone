@@ -8,7 +8,6 @@ body {
 }
 
 .container {
-    height: 100%;
     max-width: 480px;
     margin: 0 auto;
     padding: 20px;
@@ -24,7 +23,7 @@ body {
 .register-form h2 {
     font-size: 24px;
     color: #1a202c;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .form-group {
@@ -91,6 +90,9 @@ body {
     margin-bottom: 40px;
 }
 
+.logo img {
+    width: 150px;
+}
 
 .submit-button {
     width: 100%;
