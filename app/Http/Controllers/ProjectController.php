@@ -50,54 +50,22 @@ class ProjectController extends Controller
         return redirect()->route('projects.index')->with('error', 'You are not authorized to update this project.');
     }
 
-    // public function update(Request $request, Project $project)
-    // {
-    //     $this->authorize('update', $project);
-
-    //     $request->validate([
-    //         'name' => 'required',
-    //         'description' => 'required',
-    //         'admin_user_id' => 'nullable|exists:users,id', // Validate the selected user
-    //     ]);
-
-    //     $project->update($request->only(['name', 'description']));
-
-    //     // Assign the selected user as admin if provided
-    //     if ($request->has('admin_user_id')) {
-    //         $adminUser = User::findOrFail($request->admin_user_id);
-    //         $project->admin()->associate($adminUser);
-    //         $project->save();
-    //     }
-
-    //     return redirect()->route('projects.index')->with('success', 'Project updated successfully.');
-    // }
-
     public function update(Request $request, Project $project)
     {
-        $this->authorize('update', $project);
-    
         $request->validate([
             'name' => 'required',
             'description' => 'required',
-            'admin_user_id' => 'nullable|exists:users,id', // Validate the selected user
         ]);
     
-        $project->update($request->only(['name', 'description']));
-    
-        // Assign the selected user as admin if provided
-        if ($request->has('admin_user_id')) {
-            $adminUser = User::findOrFail($request->admin_user_id);
-    
-            // Check if the authenticated user is the admin or owner of the project
-            if (auth()->user()->id === $project->user_id) {
-                $project->admin_user_id = $adminUser->id;
-                $project->save();
-            }
+        // Check if the authenticated user is the owner of the project
+        if (auth()->user()->id === $project->user_id) {
+            $project->update($request->only(['name', 'description']));
+            return redirect()->route('projects.index')->with('success', 'Project updated successfully.');
         }
     
-        return redirect()->route('projects.index')->with('success', 'Project updated successfully.');
+        // If the authenticated user is not the owner, return with an error or appropriate message
+        return redirect()->route('projects.index')->with('error', 'You are not authorized to update this project.');
     }
-    
     
     
     public function show($id)
