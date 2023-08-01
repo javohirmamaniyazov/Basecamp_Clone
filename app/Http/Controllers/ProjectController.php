@@ -41,12 +41,13 @@ class ProjectController extends Controller
 
     public function edit(Project $project)
     {
-        $this->authorize('update', $project);
+        if (auth()->user()->id === $project->user_id) {
+            $users = User::all();
 
-        // Fetch all users to populate the dropdown
-        $users = User::all();
-
-        return view('projects.edit', compact('project', 'users'));
+            return view('projects.edit', compact('project', 'users'));
+        }
+        
+        return redirect()->route('projects.index')->with('error', 'You are not authorized to update this project.');
     }
 
     // public function update(Request $request, Project $project)
